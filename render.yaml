@@ -2,6 +2,6 @@ services:
   - type: web
     name: mustafa-portfolio
     env: static
-    buildCommand: npm install && npm run build
+    buildCommand: npm ci && npm run build
     staticPublishPath: ./build
     pullRequestPreviewsEnabled: true
