@@ -1,0 +1,72 @@
+/* Loading Screen Styles */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.loading-content {
+  text-align: center;
+  z-index: 2;
+}
+
+.loading-logo {
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 30px;
+  letter-spacing: -2px;
+}
+
+.loading-logo span {
+  color: var(--accent-primary);
+}
+
+.loading-text {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 25px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.loading-bar-container {
+  width: 250px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 0 auto 15px;
+}
+
+.loading-bar {
+  height: 100%;
+  background: var(--gradient-1);
+  border-radius: 2px;
+}
+
+.loading-percentage {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--accent-primary);
+}
+
+.loading-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.loading-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--accent-primary);
+  border-radius: 50%;
+  filter: blur(1px);
+}
