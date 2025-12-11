@@ -31,11 +31,10 @@ const Contact = () => {
     setIsSubmitting(true);
     setError('');
 
-    // Replace with your EmailJS credentials
-    // Get them from https://www.emailjs.com/
-    const serviceID = 'YOUR_SERVICE_ID';
-    const templateID = 'YOUR_TEMPLATE_ID';
-    const userID = 'YOUR_USER_ID';
+    // EmailJS credentials
+    const serviceID = 'service_oi9ptrs';
+    const templateID = 'template_21jpy0b';
+    const userID = '5cgCqjhhVo3KnJ-1c';
 
     try {
       await emailjs.send(
