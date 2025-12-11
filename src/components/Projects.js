@@ -109,7 +109,7 @@ const Projects = () => {
       description: 'A detailed animated breakdown of a Toyota Supra\'s structure.',
       longDescription: 'Work included object modeling, layer-by-layer animation, explosion diagram style, and precision timing. Demonstrates visual engineering and technical storytelling.',
       tech: ['3D Modeling', 'Animation', 'Visual Design', 'Technical Art'],
-      image: '/supra.png',
+      image: '/supra.PNG',
       color: '#10b981',
       modelUrl: '/supra.glb',
       highlights: [
