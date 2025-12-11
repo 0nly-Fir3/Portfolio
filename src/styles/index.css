@@ -18,6 +18,23 @@
   --transition-slow: 0.5s ease;
 }
 
+/* Light Theme Variables */
+[data-theme='light'] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --accent-primary: #6366f1;
+  --accent-secondary: #818cf8;
+  --accent-glow: rgba(99, 102, 241, 0.2);
+  --gradient-1: linear-gradient(135deg, #6366f1, #8b5cf6);
+  --gradient-2: linear-gradient(135deg, #06b6d4, #3b82f6);
+  --border-color: rgba(0, 0, 0, 0.1);
+  --card-bg: rgba(0, 0, 0, 0.02);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -26,6 +43,7 @@
 
 html {
   scroll-behavior: smooth;
+  transition: background-color 0.5s ease;
 }
 
 body {
@@ -35,6 +53,7 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   cursor: none;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 /* Hide default cursor on interactive elements */

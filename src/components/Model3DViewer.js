@@ -1,9 +1,10 @@
-import React, { Suspense, useRef } from 'react';
+import React, { Suspense, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment, PerspectiveCamera } from '@react-three/drei';
+import { motion } from 'framer-motion';
 import '../styles/Model3DViewer.css';
 
-function Model({ url }) {
+function Model({ url, onLoad }) {
   const { scene } = useGLTF(url);
   const modelRef = useRef();
 
@@ -14,13 +15,37 @@ function Model({ url }) {
     }
   });
 
+  React.useEffect(() => {
+    if (scene && onLoad) {
+      onLoad();
+    }
+  }, [scene, onLoad]);
+
   return <primitive ref={modelRef} object={scene} scale={1.5} />;
 }
 
+function LoadingSpinner() {
+  return (
+    <div className="model-loading">
+      <motion.div
+        className="loading-spinner"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+      >
+        <div className="spinner-ring"></div>
+      </motion.div>
+      <p>Loading 3D Model...</p>
+    </div>
+  );
+}
+
 function Model3DViewer({ modelUrl, projectName }) {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <div className="model-viewer-container">
-      <Canvas>
+      {isLoading && <LoadingSpinner />}
+      <Canvas style={{ opacity: isLoading ? 0 : 1, transition: 'opacity 0.5s' }}>
         <PerspectiveCamera makeDefault position={[0, 0, 5]} />
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
@@ -28,7 +53,7 @@ function Model3DViewer({ modelUrl, projectName }) {
         <pointLight position={[0, 5, 0]} intensity={0.5} />
         
         <Suspense fallback={null}>
-          <Model url={modelUrl} />
+          <Model url={modelUrl} onLoad={() => setIsLoading(false)} />
           <Environment preset="studio" />
         </Suspense>
         

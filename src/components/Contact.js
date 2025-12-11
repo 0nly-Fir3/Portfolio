@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { FiSend, FiGithub, FiMapPin, FiCheck, FiLinkedin } from 'react-icons/fi';
+import { FiSend, FiGithub, FiMapPin, FiCheck, FiLinkedin, FiAlertCircle } from 'react-icons/fi';
+import emailjs from 'emailjs-com';
+import DOMPurify from 'dompurify';
 import '../styles/Contact.css';
 
 const Contact = () => {
@@ -11,23 +13,56 @@ const Contact = () => {
     message: '',
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const sanitizedValue = DOMPurify.sanitize(e.target.value);
+    setFormData({ ...formData, [e.target.name]: sanitizedValue });
+    setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Create mailto link
-    const subject = `Portfolio Contact from ${formData.name}`;
-    const body = `Name: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
-    window.location.href = `mailto:Mustafafaham79@gmail.com?subject=${subject}&body=${body}`;
-    setIsSubmitted(true);
-    setTimeout(() => setIsSubmitted(false), 3000);
+    setIsSubmitting(true);
+    setError('');
+
+    // Replace with your EmailJS credentials
+    // Get them from https://www.emailjs.com/
+    const serviceID = 'YOUR_SERVICE_ID';
+    const templateID = 'YOUR_TEMPLATE_ID';
+    const userID = 'YOUR_USER_ID';
+
+    try {
+      await emailjs.send(
+        serviceID,
+        templateID,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+        },
+        userID
+      );
+      
+      setIsSubmitted(true);
+      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => setIsSubmitted(false), 5000);
+    } catch (err) {
+      console.error('EmailJS error:', err);
+      setError('Failed to send message. Please try again or email directly.');
+      
+      // Fallback to mailto
+      const subject = `Portfolio Contact from ${formData.name}`;
+      const body = `Name: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
+      window.location.href = `mailto:Mustafafaham79@gmail.com?subject=${subject}&body=${body}`;
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const containerVariants = {
@@ -159,10 +194,15 @@ const Contact = () => {
             <motion.button
               type="submit"
               className={`submit-btn ${isSubmitted ? 'submitted' : ''}`}
-              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(99, 102, 241, 0.5)' }}
-              whileTap={{ scale: 0.95 }}
+              disabled={isSubmitting}
+              whileHover={!isSubmitting ? { scale: 1.05, boxShadow: '0 0 30px rgba(99, 102, 241, 0.5)' } : {}}
+              whileTap={!isSubmitting ? { scale: 0.95 } : {}}
             >
-              {isSubmitted ? (
+              {isSubmitting ? (
+                <>
+                  Sending...
+                </>
+              ) : isSubmitted ? (
                 <>
                   <FiCheck /> Message Sent!
                 </>
@@ -172,6 +212,16 @@ const Contact = () => {
                 </>
               )}
             </motion.button>
+
+            {error && (
+              <motion.div
+                className="form-error"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <FiAlertCircle /> {error}
+              </motion.div>
+            )}
           </motion.form>
         </div>
       </motion.div>

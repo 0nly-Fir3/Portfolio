@@ -7,6 +7,7 @@ import '../styles/Projects.css';
 
 const Projects = () => {
   const [selectedProject, setSelectedProject] = useState(null);
+  const [filter, setFilter] = useState('All');
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
@@ -121,6 +122,12 @@ const Projects = () => {
     },
   ];
 
+  const categories = ['All', 'Game Development', 'Product Design', 'Systems', 'Web Development', 'Web Tool', '3D Animation'];
+  
+  const filteredProjects = filter === 'All' 
+    ? projects 
+    : projects.filter(project => project.category === filter);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -158,27 +165,54 @@ const Projects = () => {
           <div className="section-line"></div>
         </motion.div>
 
-        <motion.div
-          className="projects-grid"
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
+        <motion.div 
+          className="project-filters"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
         >
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              className="project-card"
-              variants={cardVariants}
-              onClick={() => setSelectedProject(project)}
-              whileHover={{ 
-                y: -10,
+          {categories.map((category) => (
+            <motion.button
+              key={category}
+              className={`filter-btn ${filter === category ? 'active' : ''}`}
+              onClick={() => setFilter(category)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {category}
+            </motion.button>
+          ))}
+        </motion.div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={filter}
+            className="projects-grid"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+          >
+            {filteredProjects.map((project, index) => (
+              <motion.div
+                key={project.id}
+                className="project-card"
+                variants={cardVariants}
+                onClick={() => setSelectedProject(project)}
+                whileHover={{ 
+                  y: -10,
                 transition: { type: 'spring', stiffness: 300 }
               }}
               style={{ '--accent-color': project.color }}
             >
               <div className="project-image">
                 {project.image.startsWith('/') ? (
-                  <img src={project.image} alt={project.title} className="project-emoji" />
+                  <img 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="project-emoji"
+                    loading="lazy"
+                  />
                 ) : (
                   <span className="project-emoji">{project.image}</span>
                 )}
@@ -232,6 +266,7 @@ const Projects = () => {
             </motion.div>
           ))}
         </motion.div>
+        </AnimatePresence>
 
         <AnimatePresence>
           {selectedProject && (

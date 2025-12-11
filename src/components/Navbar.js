@@ -39,6 +39,8 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
+      role="navigation"
+      aria-label="Main navigation"
     >
       <div className="nav-container">
         <motion.a
@@ -47,6 +49,7 @@ const Navbar = () => {
           onClick={(e) => scrollToSection(e, '#hero')}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          aria-label="Go to homepage"
         >
           MF<span className="logo-dot">.</span>
         </motion.a>
@@ -74,6 +77,8 @@ const Navbar = () => {
           className="mobile-menu-btn"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           whileTap={{ scale: 0.9 }}
+          aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isMobileMenuOpen}
         >
           {isMobileMenuOpen ? <FiX /> : <FiMenu />}
         </motion.button>

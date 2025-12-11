@@ -154,6 +154,28 @@
   font-size: 1.1rem;
 }
 
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #ef4444;
+  font-size: 0.9rem;
+}
+
+.form-error svg {
+  flex-shrink: 0;
+}
+
 @media (max-width: 900px) {
   .contact-content {
     grid-template-columns: 1fr;
